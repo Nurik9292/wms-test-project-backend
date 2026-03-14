@@ -15,6 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);
+        $middleware->alias([
+            'tenant' => \App\Http\Middleware\EnsureTenant::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
+        ]);
+        $middleware->priority([
+            \App\Http\Middleware\EnsureTenant::class,
+            \App\Http\Middleware\CheckPermission::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
